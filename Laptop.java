@@ -1,34 +1,35 @@
-//Laptop computer: adds screen size to other Computer info
+// Laptop class: now uses composition and is immutable
 
-public class Laptop extends Computer { //Laptop inherits from Computer
-    String screenSize=null;
 
-    //Constructors
-    public Laptop() {} //No-arg constructor
+public final class Laptop { // not extending computer anymore
+    // keep computer data inside this object (composition)
+    private final Computer computer;
 
-    public Laptop(String CPU, String RAM, String disk, String screenSize) {
-        //Inherited from Computer superclass
-        this.CPU=CPU;
-        this.RAM=RAM;
-        this.disk=disk;
+    // extra thing for laptop only
+    private final String screenSize;
 
-        //Only in Laptop subclass
-        this.screenSize=screenSize;
+    // constructor: set everything once
+    public Laptop(Computer computer, String screenSize) {
+        // just save what we get, we assume input was validated outside
+        this.computer = computer;
+        this.screenSize = screenSize;
     }
 
-    //Setter
-    public void setScreenSize(String screenSize) {
-        this.screenSize=screenSize;
+    // getters only
+    public Computer getComputer() {
+        return this.computer;
     }
 
-    //Getter
     public String getScreenSize() {
         return this.screenSize;
     }
 
-    //Return formatted version of data
+    // same output format as before so UI does not change
+    @Override
     public String toString() {
-        return "Type:Laptop\tCPU:" + this.CPU + "\tRAM:" + this.RAM + "\tDisk:" + this.disk + "\tScreen:" + this.screenSize;
+        return "Type:Laptop\tCPU:" + computer.getCPU()
+                + "\tRAM:" + computer.getRAM()
+                + "\tDisk:" + computer.getDisk()
+                + "\tScreen:" + this.screenSize;
     }
-    
 }

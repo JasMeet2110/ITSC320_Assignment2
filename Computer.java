@@ -2,30 +2,30 @@
 // Immutable base class: manages CPU, RAM, and Disk information securely
 
 public final class Computer {
-    private final String CPU;
-    private final String RAM;
+    private final String cpu;
+    private final String ram;
     private final String disk;
 
     // Constructor with input validation (no null or empty values)
-    public Computer(String CPU, String RAM, String disk) {
-        if (CPU == null || CPU.isEmpty() ||
-                RAM == null || RAM.isEmpty() ||
+    public Computer(String cpu, String ram, String disk) {
+        if (cpu == null || cpu.isEmpty() ||
+                ram == null || ram.isEmpty() ||
                 disk == null || disk.isEmpty()) {
             throw new IllegalArgumentException("CPU, RAM, and Disk must not be null or empty.");
         }
 
-        this.CPU = CPU;
-        this.RAM = RAM;
+        this.cpu = cpu;
+        this.ram = ram;
         this.disk = disk;
     }
 
     // Getters only (immutability enforced)
     public String getCPU() {
-        return this.CPU;
+        return this.cpu;
     }
 
     public String getRAM() {
-        return this.RAM;
+        return this.ram;
     }
 
     public String getDisk() {
@@ -34,6 +34,6 @@ public final class Computer {
 
     @Override
     public String toString() {
-        return "CPU: " + this.CPU + ", RAM: " + this.RAM + ", Disk: " + this.disk;
+        return "CPU: " + this.cpu + ", RAM: " + this.ram + ", Disk: " + this.disk;
     }
 }

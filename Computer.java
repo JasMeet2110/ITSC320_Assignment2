@@ -1,33 +1,25 @@
-//Computer class: manages computer CPU, RAM and Disk information
+// Computer.java
+// Immutable base class: manages CPU, RAM, and Disk information securely
 
 public final class Computer {
     private final String CPU;
     private final String RAM;
     private final String disk;
 
-    // Constructors
-    // public Computer() {} //No-arg contructor
-
+    // Constructor with input validation (no null or empty values)
     public Computer(String CPU, String RAM, String disk) {
+        if (CPU == null || CPU.isEmpty() ||
+                RAM == null || RAM.isEmpty() ||
+                disk == null || disk.isEmpty()) {
+            throw new IllegalArgumentException("CPU, RAM, and Disk must not be null or empty.");
+        }
+
         this.CPU = CPU;
         this.RAM = RAM;
         this.disk = disk;
     }
 
-    // Setters
-    // public void setCPU(String CPU) {
-    // this.CPU=CPU;
-    // }
-
-    // public void setRAM(String RAM) {
-    // this.RAM=RAM;
-    // }
-
-    // public void setDisk(String disk) {
-    // this.disk=disk;
-    // }
-
-    // Getters
+    // Getters only (immutability enforced)
     public String getCPU() {
         return this.CPU;
     }
@@ -44,5 +36,4 @@ public final class Computer {
     public String toString() {
         return "CPU: " + this.CPU + ", RAM: " + this.RAM + ", Disk: " + this.disk;
     }
-
 }

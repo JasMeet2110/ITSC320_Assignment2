@@ -1,76 +1,66 @@
-// simple input validator using whitelists
-// edit the arrays to allow/disallow values
-// loops until user enters something valid
+import java.util.*;
 
-import java.util.Scanner;
+public final class InputValidator {
 
-public class InputValidator {
+    // Assignment whitelists
+    private static final Set<String> CPU = set("i5", "i7");
+    private static final Set<String> RAM = set("16", "32");
+    private static final Set<String> DISK = set("512", "1024");
+    private static final Set<String> GPU = set("Nvidia", "AMD");
+    private static final Set<String> SCREEN = set("13", "14");
 
-    // whitelists
-    private static final String[] CPU = {"i5", "i7"};
-    private static final String[] RAM = {"16", "32"};
-    private static final String[] DISK = {"512", "1024"};
-    private static final String[] GPU = {"Nvidia", "AMD"};   // desktop only
-    private static final String[] SCREEN = {"13", "14"};     // laptop only
+    private InputValidator() {
+    }
 
-    // prompt helpers 
+    private static Set<String> set(String... vals) {
+        return new HashSet<>(Arrays.asList(vals));
+    }
+
+    // ---------- Low-level whitelist reader ----------
+    private static String readFrom(Scanner s, String prompt, Set<String> whitelist) {
+        while (true) {
+            System.out.print(prompt);
+            String in = s.nextLine().trim();
+            if (whitelist.contains(in))
+                return in;
+            System.out.println("Invalid value. Allowed: " + whitelist);
+        }
+    }
+
+    // ---------- Your method names (used in ManageComputers.java) ----------
     public static String promptCPU(Scanner s) {
-        return promptFromWhitelist(s, "Enter CPU (i5/i7): ", CPU, true);
+        return readFrom(s, "Enter CPU (i5/i7):", CPU);
     }
 
     public static String promptRAM(Scanner s) {
-        return promptFromWhitelist(s, "Enter RAM (16/32): ", RAM, false);
+        return readFrom(s, "Enter RAM (16/32):", RAM);
     }
 
     public static String promptDisk(Scanner s) {
-        return promptFromWhitelist(s, "Enter Disk (512/1024): ", DISK, false);
+        return readFrom(s, "Enter Disk (512/1024):", DISK);
     }
 
-    public static String promptGPU(Scanner s) { // desktop only
-        return promptFromWhitelist(s, "Enter GPU (Nvidia/AMD): ", GPU, true);
-    }
+    public static String promptGPU(Scanner s) {
+        return readFrom(s, "Enter GPU:", GPU);
+    } // prompt text matches your original
 
-    public static String promptScreenSize(Scanner s) { // laptop only
-        return promptFromWhitelist(s, "Enter Screen (13/14): ", SCREEN, false);
-    }
+    public static String promptScreenSize(Scanner s) {
+        return readFrom(s, "Enter screen size:", SCREEN);
+    } // prompt text matches your original
 
-    private static String promptFromWhitelist(Scanner s, String prompt, String[] allowed, boolean keepCaseFor) {
+    // ---------- Safe numeric index reader (1-based from user, returns 0-based)
+    // ----------
+    public static int readIndex(Scanner s, int size) {
         while (true) {
-            System.out.print(prompt);
-            String raw = s.nextLine().trim();
-
-            // try to match ignoring case but return canonical value from whitelist
-            for (String ok : allowed) {
-                if (raw.equalsIgnoreCase(ok)) {
-                    // return the canonical version so data is consistent
-                    return keepCaseFor ? ok : ok;
-                }
+            System.out.print("Enter number of computer:");
+            String in = s.nextLine().trim();
+            try {
+                int v = Integer.parseInt(in);
+                if (v >= 1 && v <= size)
+                    return v - 1;
+            } catch (NumberFormatException ignore) {
             }
-
-
-            System.out.println("Invalid input. Allowed: " + listOptions(allowed));
+            System.out.println("Invalid computer number entered!");
         }
-    }
-
-    // just shows allowed values in one line
-    private static String listOptions(String[] arr) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < arr.length; i++) {
-            sb.append(arr[i]);
-            if (i < arr.length - 1) sb.append("/");
-        }
-        return sb.toString();
-    }
-
-    // optional direct check methods
-    public static boolean isValidCPU(String v)    { return inList(v, CPU); }
-    public static boolean isValidRAM(String v)    { return inList(v, RAM); }
-    public static boolean isValidDisk(String v)   { return inList(v, DISK); }
-    public static boolean isValidGPU(String v)    { return inList(v, GPU); }
-    public static boolean isValidScreen(String v) { return inList(v, SCREEN); }
-
-    private static boolean inList(String v, String[] arr) {
-        for (String x : arr) if (x.equalsIgnoreCase(v)) return true;
-        return false;
     }
 }
